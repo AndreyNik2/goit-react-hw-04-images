@@ -43,23 +43,22 @@ class AppSearch extends React.Component {
     this.setState({ selectedImage: imageURL });
   };
 
-  resetImage = imageURL => {
+  resetImage = () => {
     this.setState({ selectedImage: null });
   };
 
   incrementPage = () => {
     this.setState(prevState => ({ page: (prevState.page += 1) }));
-    console.log('Page +1');
+    console.log('Page в incrementPage после +1:', this.state.page);
   };
 
   async componentDidUpdate(_, prevState) {
-    console.log(this.state.page);
     if (
       prevState.query !== this.state.query ||
       prevState.page !== this.state.page
     ) {
-      console.log(prevState.page);
-      console.log(this.state.page);
+      console.log('prevState.page в componentDidUpdate', prevState.page);
+      console.log('this.state.page в componentDidUpdate', this.state.page);
       try {
         this.setState({ isLoading: true });
         const page = this.state.page;

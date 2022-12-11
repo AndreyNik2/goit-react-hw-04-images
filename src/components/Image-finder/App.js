@@ -19,7 +19,7 @@ const modalStyles = {
 
 Modal.setAppElement('#root');
 
-class App extends React.Component {
+class AppSearch extends React.Component {
   state = {
     query: '',
     hits: [],
@@ -100,4 +100,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default AppSearch;

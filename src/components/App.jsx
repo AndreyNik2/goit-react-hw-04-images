@@ -1,4 +1,4 @@
-import Searchbar from "./Image-finder/App";
+import AppSearch from "./Image-finder/App";
 
 export const App = () => {
   return (
@@ -10,7 +10,7 @@ export const App = () => {
 
       }}
     >
-      <Searchbar/>
+      <AppSearch/>
     </div>
   );
 };

@@ -61,6 +61,7 @@ class AppSearch extends React.Component {
         this.setState({ isLoading: true });
         const page = this.state.page;
         const query = this.state.query;
+        console.log(this.state.page);
         const { hits, totalHits } = await fetchResults(query, page);
         this.setState(prevState => ({
           hits: [...prevState.hits, ...hits],

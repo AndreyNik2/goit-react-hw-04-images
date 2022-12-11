@@ -47,6 +47,11 @@ class AppSearch extends React.Component {
     this.setState({ selectedImage: null });
   };
 
+  incrementPage = () => {
+    this.setState(prevState => ({ page: (prevState.page += 1) }));
+    console.log('Page +1');
+  };
+
   async componentDidUpdate(_, prevState) {
     if (
       prevState.query !== this.state.query ||
@@ -72,16 +77,16 @@ class AppSearch extends React.Component {
     }
   }
 
-  incrementPage = () => {
-    this.setState(prevState => ({ page: (prevState.page += 1) }));
-  };
-
   render() {
     return (
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
         <main>
-          <ImageGallery isLoading={this.state.isLoading} selectImage={this.selectImage} hits={this.state.hits} />
+          <ImageGallery
+            isLoading={this.state.isLoading}
+            selectImage={this.selectImage}
+            hits={this.state.hits}
+          />
           {this.state.totalHits > 12 && (
             <LoadMore incrementPage={this.incrementPage} />
           )}

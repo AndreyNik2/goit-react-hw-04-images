@@ -53,6 +53,7 @@ class AppSearch extends React.Component {
   };
 
   async componentDidUpdate(_, prevState) {
+    console.log(this.state.page);
     if (
       prevState.query !== this.state.query ||
       prevState.page !== this.state.page

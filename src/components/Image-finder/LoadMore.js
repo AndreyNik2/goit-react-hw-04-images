@@ -1,9 +1,11 @@
 import { LoadMoreBtn } from "./LoadMore.styled"
 
 
-export const LoadMore = ({ incrementPage }) => {
-    return (
-        <LoadMoreBtn type="button" onClick={incrementPage}>Load more</LoadMoreBtn>
-    )
-}
+export const LoadMore = ({ loadMoreProp }) => {
+  return (
+    <LoadMoreBtn type="button" onClick={loadMoreProp}>
+      Load more
+    </LoadMoreBtn>
+  );
+};
 

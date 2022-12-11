@@ -88,7 +88,7 @@ class AppSearch extends React.Component {
             hits={this.state.hits}
           />
           {this.state.totalHits > 12 && (
-            <LoadMore incrementPage={this.incrementPage} />
+            <LoadMore loadMoreProp={this.incrementPage} />
           )}
           <Toaster position="top-right" />
         </main>

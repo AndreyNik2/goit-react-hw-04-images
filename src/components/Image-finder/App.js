@@ -48,7 +48,7 @@ class AppSearch extends React.Component {
   };
 
   incrementPage = async () => {
-    await this.setState(prevState => ({ page: (prevState.page += 1) }));
+    this.setState(prevState => ({ page: (prevState.page += 1) }));
     console.log('Page в incrementPage после +1:', this.state.page);
   };
 

@@ -47,8 +47,8 @@ class AppSearch extends React.Component {
     this.setState({ selectedImage: null });
   };
 
-  incrementPage = () => {
-    this.setState(prevState => { return { page: (prevState.page += 1) } });
+  incrementPage = async () => {
+    await this.setState(prevState => ({ page: (prevState.page += 1) }));
     console.log('Page в incrementPage после +1:', this.state.page);
   };
 

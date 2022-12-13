@@ -48,7 +48,7 @@ class AppSearch extends React.Component {
   };
 
   incrementPage = () => {
-    this.setState(prevState => { return { page: prevState.page += 1 } });
+    this.setState(prevState => { return { page: prevState.page + 1 } });
     
   };
 

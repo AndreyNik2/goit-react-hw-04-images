@@ -57,8 +57,6 @@ class AppSearch extends React.Component {
       prevState.query !== this.state.query ||
       prevState.page !== this.state.page
     ) {
-      console.log('prevState.page в componentDidUpdate', prevState.page);
-      console.log('this.state.page в componentDidUpdate', this.state.page);
       try {
         this.setState({ isLoading: true });
         const { page, query } = this.state;
@@ -83,7 +81,6 @@ class AppSearch extends React.Component {
     return (
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
-        <p>Page, {this.state.page}</p>
         <main>
           <ImageGallery
             isLoading={isLoading}

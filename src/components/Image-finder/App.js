@@ -83,6 +83,7 @@ class AppSearch extends React.Component {
     return (
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
+        <p>Page, {this.state.page}</p>
         <main>
           <ImageGallery
             isLoading={isLoading}

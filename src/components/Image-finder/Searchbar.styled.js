@@ -10,6 +10,8 @@ align-items: center;
 `;
 
 export const ButtonSubmit = styled.button`
-
+cursor: pointer;
 margin-right: 15px;
+border: none;
+border-radius: 3px;
 `;

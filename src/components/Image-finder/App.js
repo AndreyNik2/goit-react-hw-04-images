@@ -47,9 +47,9 @@ class AppSearch extends React.Component {
     this.setState({ selectedImage: null });
   };
 
-  incrementPage = async () => {
-    this.setState(prevState => ({ page: (prevState.page += 1) }));
-    console.log('Page в incrementPage после +1:', this.state.page);
+  incrementPage = () => {
+    this.setState(prevState => { return { page: prevState.page += 1 } });
+    
   };
 
   async componentDidUpdate(_, prevState) {
@@ -61,8 +61,7 @@ class AppSearch extends React.Component {
       console.log('this.state.page в componentDidUpdate', this.state.page);
       try {
         this.setState({ isLoading: true });
-        const page = this.state.page;
-        const query = this.state.query;
+        const { page, query } = this.state;
         const { hits, totalHits } = await fetchResults(query, page);
         this.setState(prevState => ({
           hits: [...prevState.hits, ...hits],
@@ -80,27 +79,28 @@ class AppSearch extends React.Component {
   }
 
   render() {
+    const {isLoading, hits, totalHits, selectedImage} = this.state
     return (
       <>
         <Searchbar handleSubmit={this.handleSubmit} />
         <main>
           <ImageGallery
-            isLoading={this.state.isLoading}
+            isLoading={isLoading}
             selectImage={this.selectImage}
-            hits={this.state.hits}
+            hits={hits}
           />
-          {this.state.totalHits > 12 && (
+          {totalHits > 12 && (
             <LoadMore loadMoreProp={this.incrementPage} />
           )}
           <Toaster position="top-right" />
         </main>
         <Modal
-          isOpen={this.state.selectedImage !== null}
+          isOpen={selectedImage !== null}
           onRequestClose={this.resetImage}
           style={modalStyles}
-          shouldCloseOnEsc={this.state.selectedImage !== null}
+          shouldCloseOnEsc={selectedImage !== null}
         >
-          <img src={this.state.selectedImage} alt="Large" width="720px" />
+          <img src={selectedImage} alt="Large" width="720px" />
         </Modal>
       </>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Modal from 'react-modal';
 import toast, { Toaster } from 'react-hot-toast';
 import { LoadMore } from './LoadMore';
@@ -19,90 +19,104 @@ const modalStyles = {
 
 Modal.setAppElement('#root');
 
-class AppSearch extends React.Component {
-  state = {
-    query: '',
-    hits: [],
-    page: 1,
-    isLoading: false,
-    totalHits: 0,
-    selectedImage: null,
-  };
+const AppSearch = () => {
+  const [query, setQuery] = useState('');
+  const [hits, setHits] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalHits, setTotalHits] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const isMounted = useRef(false);
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.setState({
-      query: event.target.elements.query.value,
-      hits: [],
-      page: 1,
-    });
+    setQuery(event.target.elements.query.value);
+    setHits([]);
+    setPage(1);
     event.target.reset();
   };
 
-  selectImage = imageURL => {
-    this.setState({ selectedImage: imageURL });
+  const selectImage = imageURL => {
+    setSelectedImage(imageURL);
   };
 
-  resetImage = () => {
-    this.setState({ selectedImage: null });
+  const resetImage = () => {
+    setSelectedImage(null);
   };
 
-  incrementPage = () => {
-    this.setState(prevState => { return { page: prevState.page + 1 } });
-    
+  const incrementPage = () => {
+    setPage(prevState => prevState + 1);
   };
 
-  async componentDidUpdate(_, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      try {
-        this.setState({ isLoading: true });
-        const { page, query } = this.state;
-        const { hits, totalHits } = await fetchResults(query, page);
-        this.setState(prevState => ({
-          hits: [...prevState.hits, ...hits],
-          totalHits: totalHits,
-          isLoading: false,
-        }));
-        if (totalHits === 0 || !totalHits) {
-          toast.error('Nothing found for your request :(');
-        }
-        this.setState({ isLoading: false });
-      } catch (error) {
-        toast.error('Something went wrong :( Try reloading the page.');
-      }
+  // useEffect(() => {
+  //   if (!isMounted.current) {
+  //     isMounted.current = true;
+  //     console.log('до');
+  //     return;
+  //   }
+  //   console.log('после');
+  //   setIsLoading(true);
+  //   fetchResults(query, page).then(images => {
+  //     setHits(p => [...p, ...images.hits]);
+  //     setTotalHits(images.totalHits);
+  //     setIsLoading(false);
+      
+  //   }).catch(toast.error('Something went wrong :( Try reloading the page.'))
+  // }, [page, query]);
+
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      console.log('до');
+      return
     }
-  }
+    if (query.length === 0) {
+      return
+    }
+    console.log('после');
+    async function fetchData() {
+      try {
+      setIsLoading(true)
+      const { hits, totalHits } = await fetchResults(query, page);
+      setHits(p => [...p, ...hits]);
+      setTotalHits(totalHits);
+        setIsLoading(false);
+        console.log(hits);
+      if (totalHits === 0 || !totalHits) {
+        toast.error('Nothing found for your request :(');
+      }
+      this.setState({ isLoading: false });
+    } catch (error) {
+      toast.error('Something went wrong :( Try reloading the page.');
+    }
 
-  render() {
-    const {isLoading, hits, totalHits, selectedImage} = this.state
-    return (
-      <>
-        <Searchbar handleSubmit={this.handleSubmit} />
-        <main>
-          <ImageGallery
-            isLoading={isLoading}
-            selectImage={this.selectImage}
-            hits={hits}
-          />
-          {totalHits > 12 && (
-            <LoadMore loadMoreProp={this.incrementPage} />
-          )}
-          <Toaster position="top-right" />
-        </main>
-        <Modal
-          isOpen={selectedImage !== null}
-          onRequestClose={this.resetImage}
-          style={modalStyles}
-          shouldCloseOnEsc={selectedImage !== null}
-        >
-          <img src={selectedImage} alt="Large" width="720px" />
-        </Modal>
-      </>
-    );
-  }
-}
+    }
+    fetchData();
+  
+  }, [page, query]);
+
+  return (
+    <>
+      <Searchbar handleSubmit={handleSubmit} />
+      <main>
+        <ImageGallery
+          isLoading={isLoading}
+          selectImage={selectImage}
+          hits={hits}
+        />
+        {totalHits > 12 && <LoadMore loadMoreProp={incrementPage} />}
+        <Toaster position="top-right" />
+      </main>
+      <Modal
+        isOpen={selectedImage !== null}
+        onRequestClose={resetImage}
+        style={modalStyles}
+        shouldCloseOnEsc={selectedImage !== null}
+      >
+        <img src={selectedImage} alt="Large" width="720px" />
+      </Modal>
+    </>
+  );
+};
 
 export default AppSearch;

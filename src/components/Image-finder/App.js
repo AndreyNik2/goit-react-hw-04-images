@@ -60,39 +60,35 @@ const AppSearch = () => {
   //     setHits(p => [...p, ...images.hits]);
   //     setTotalHits(images.totalHits);
   //     setIsLoading(false);
-      
+
   //   }).catch(toast.error('Something went wrong :( Try reloading the page.'))
   // }, [page, query]);
 
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
-      console.log('до');
-      return
+      return;
     }
     if (query.length === 0) {
-      return
-    }
-    console.log('после');
-    async function fetchData() {
-      try {
-      setIsLoading(true)
-      const { hits, totalHits } = await fetchResults(query, page);
-      setHits(p => [...p, ...hits]);
-      setTotalHits(totalHits);
-        setIsLoading(false);
-        console.log(hits);
-      if (totalHits === 0 || !totalHits) {
-        toast.error('Nothing found for your request :(');
-      }
-      this.setState({ isLoading: false });
-    } catch (error) {
-      toast.error('Something went wrong :( Try reloading the page.');
+      return;
     }
 
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const { hits, totalHits } = await fetchResults(query, page);
+        setHits(p => [...p, ...hits]);
+        setTotalHits(totalHits);
+        setIsLoading(false);
+        if (totalHits === 0 || !totalHits) {
+          toast.error('Nothing found for your request :(');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Something went wrong :( Try reloading the page.');
+      }
     }
     fetchData();
-  
   }, [page, query]);
 
   return (
